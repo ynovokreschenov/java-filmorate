@@ -15,7 +15,7 @@ import java.util.*;
 @RequestMapping("/films")
 public class FilmController {
     private final Map<Long, Film> films = new HashMap<>();
-    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
+    private static final Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @GetMapping
     public Collection<Film> getAll() {
@@ -72,7 +72,7 @@ public class FilmController {
         }
         //дата релиза — не раньше 28 декабря 1895 года;
         LocalDate dateMin = LocalDate.of(1895, 12, 28);
-        if (film.getReleaseDate().isBefore(dateMin)){
+        if (film.getReleaseDate().isBefore(dateMin)) {
             log.error("дата релиза {} — должна быть не раньше {}", film.getReleaseDate(), dateMin);
             return false;
         }
