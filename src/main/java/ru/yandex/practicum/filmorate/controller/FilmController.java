@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -24,7 +23,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film create(@Valid @RequestBody Film film){
+    public Film create(@Valid @RequestBody Film film) {
         if (validate(film)) {
             film.setId(getNextId());
             films.put(film.getId(), film);
@@ -35,9 +34,9 @@ public class FilmController {
     }
 
     //@PutMapping("/{id}")
-    //public Film update(@RequestBody Film film, @PathVariable Long id){
+    //public Film update(@RequestBody Film film, @PathVariable Long id) {
     @PutMapping
-    public Film update(@Valid @RequestBody Film film){
+    public Film update(@Valid @RequestBody Film film) {
         Long id = film.getId();
         if (!films.containsKey(id)) {
             throw new ConditionsNotMetException("Указан некорректный идентификатор");
@@ -78,7 +77,7 @@ public class FilmController {
             return false;
         }
         //продолжительность фильма должна быть положительным числом.
-        if (film.getDuration() < 0){
+        if (film.getDuration() < 0) {
             log.error("продолжительность фильма должна быть положительным числом: {}", film.getDuration());
             return false;
         }

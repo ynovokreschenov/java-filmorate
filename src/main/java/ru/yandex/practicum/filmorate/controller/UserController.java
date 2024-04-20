@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user){
+    public User create(@Valid @RequestBody User user) {
         if (validate(user)) {
             user.setId(getNextId());
             users.put(user.getId(), user);
@@ -40,9 +40,9 @@ public class UserController {
     }
 
     //@PutMapping("/{id}")
-    //public User update(@RequestBody User user, @PathVariable Long id){
+    //public User update(@RequestBody User user, @PathVariable Long id) {
     @PutMapping
-    public User update(@Valid @RequestBody User user){
+    public User update(@Valid @RequestBody User user) {
         Long id = user.getId();
         if (!users.containsKey(id)) {
             throw new ConditionsNotMetException("Указан некорректный идентификатор");
@@ -65,7 +65,7 @@ public class UserController {
         return ++currentMaxId;
     }
 
-    private boolean validate(User user){
+    private boolean validate(User user) {
         // электронная почта не может быть пустой и должна содержать символ @;
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             log.error("Email не может быть пустым и должен содержать @: {}", user.getEmail());
