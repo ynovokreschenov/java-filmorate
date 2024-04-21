@@ -33,8 +33,6 @@ public class FilmController {
         }
     }
 
-    //@PutMapping("/{id}")
-    //public Film update(@RequestBody Film film, @PathVariable Long id) {
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         Long id = film.getId();

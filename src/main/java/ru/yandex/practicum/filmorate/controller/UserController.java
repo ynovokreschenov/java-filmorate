@@ -16,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-//@Slf4j
 public class UserController {
     private final Map<Long, User> users = new HashMap<>();
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -37,13 +36,11 @@ public class UserController {
         }
     }
 
-    //@PutMapping("/{id}")
-    //public User update(@RequestBody User user, @PathVariable Long id) {
     @PutMapping
     public User update(@Valid @RequestBody User user) {
         Long id = user.getId();
         if (!users.containsKey(id)) {
-            throw new ConditionsNotMetException("Указан некорректный идентификатор");
+            throw new ConditionsNotMetException("Указан некорректный идентификатор: " + id);
         }
         if (validate(user)) {
             user.setId(id);
