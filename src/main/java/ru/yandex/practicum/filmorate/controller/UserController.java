@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.ValidateService;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -20,18 +19,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final ValidateService validateService;
-
-//    public UserController(UserService userService, ValidateService validateService) {
-//        this.userService = userService;
-//        this.validateService = validateService;
-//    }
-    //private final UserStorage userStorage;
-    //private final UserController userController;
-
-    //public UserController(UserStorage userStorage, UserController userController){
-    //    this.userStorage = userStorage;
-    //    this.userController = userController;
-    //}
 
     @GetMapping
     public List<User> getAll() {
