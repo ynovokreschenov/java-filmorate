@@ -33,7 +33,7 @@ public class ValidateService {
         }
     }
 
-    public void validateFilm(Film film){
+    public void validateFilm(Film film) {
         //название не может быть пустым;
         if (film.getName() == null || film.getName().isBlank()) {
             log.error("Название не может быть пустым");
