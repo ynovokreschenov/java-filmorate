@@ -14,21 +14,21 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(final NotFoundException e){
+    public ErrorResponse handleNotFoundException(final NotFoundException e) {
         log.info("404 {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final ValidationException e){
+    public ErrorResponse handleValidationException(final ValidationException e) {
         log.info("Validation: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(final Exception e){
+    public ErrorResponse handleException(final Exception e) {
         log.warn("Error", e);
         // TODO: вывести stacktrace
         //return new ErrorResponse(e.getStackTrace().toString());
