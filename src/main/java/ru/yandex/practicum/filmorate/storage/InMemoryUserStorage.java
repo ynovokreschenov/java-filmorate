@@ -41,7 +41,7 @@ public class InMemoryUserStorage implements UserStorage {
         Long id = ++generator;
         userMap.put(id, user);
         user.setId(id);
-        if (user.getName().isBlank()){
+        if (user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         return user;
@@ -68,7 +68,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> getUserFriends(Long userId) {
         List<User> userFriends = new ArrayList<>();
-        for(Long friendId : userFriendIds.get(userId)) {
+        for (Long friendId : userFriendIds.get(userId)) {
             userFriends.add(userMap.get(friendId));
         }
         return userFriends;
@@ -82,7 +82,7 @@ public class InMemoryUserStorage implements UserStorage {
                 .filter(oFriendIds::contains)
                 .collect(Collectors.toSet());
         List<User> commonFriendList = new ArrayList<>();
-        for(Long friendId : commonFriendIds) {
+        for (Long friendId : commonFriendIds) {
             commonFriendList.add(userMap.get(friendId));
         }
         return commonFriendList;
