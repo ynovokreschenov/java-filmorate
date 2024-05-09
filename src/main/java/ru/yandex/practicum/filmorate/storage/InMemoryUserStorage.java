@@ -29,13 +29,6 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public void update(User user) {
         userMap.put(user.getId(), user);
-//        Long id = user.getId();
-//        if (!userMap.containsKey(id)) {
-//            throw new ConditionsNotMetException("Указан некорректный идентификатор: " + id);
-//        }
-//        user.setId(id);
-//        userMap.replace(id, user);
-        //return user;
     }
 
     @Override
