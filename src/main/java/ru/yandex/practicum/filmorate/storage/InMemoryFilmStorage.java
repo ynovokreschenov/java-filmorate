@@ -44,7 +44,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         fLikeIds.remove(user.getId());
     }
 
-    public List<Film> listTop10Films(Integer count){
+    public List<Film> listTop10Films(Integer count) {
         HashMap<Film, Integer> filmLikesMap = new HashMap<>();
         for(Map.Entry<Long, Set<Long>> entry : filmLikeIds.entrySet()) {
             Long filmId = entry.getKey();
@@ -59,36 +59,10 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .sorted(Map.Entry.comparingByValue());
 
         List<Film> filmsSorted = (List<Film>) filmLikesMap.keySet();
-        if (filmsSorted.size() > count){
-            return filmsSorted.subList(0, count-1);
+        if (filmsSorted.size() > count) {
+            return filmsSorted.subList(0, count - 1);
         } else {
             return filmsSorted;
         }
     }
-
-
-//    private boolean validate(Film film) {
-//        //название не может быть пустым;
-//        if (film.getName() == null || film.getName().isBlank()) {
-//            log.error("Название не может быть пустым");
-//            return false;
-//        }
-//        //максимальная длина описания — 200 символов;
-//        if (film.getDescription().length() > 200) {
-//            log.error("Максимальная длина описания — 200 символов: {}", film.getDescription().length());
-//            return false;
-//        }
-//        //дата релиза — не раньше 28 декабря 1895 года;
-//        LocalDate dateMin = LocalDate.of(1895, 12, 28);
-//        if (film.getReleaseDate().isBefore(dateMin)) {
-//            log.error("дата релиза {} — должна быть не раньше {}", film.getReleaseDate(), dateMin);
-//            return false;
-//        }
-//        //продолжительность фильма должна быть положительным числом.
-//        if (film.getDuration() < 0) {
-//            log.error("продолжительность фильма должна быть положительным числом: {}", film.getDuration());
-//            return false;
-//        }
-//        return true;
-//    }
 }
