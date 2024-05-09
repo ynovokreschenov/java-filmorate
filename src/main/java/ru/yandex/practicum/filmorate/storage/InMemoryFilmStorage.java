@@ -46,7 +46,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     public List<Film> listTop10Films(Integer count) {
         HashMap<Film, Integer> filmLikesMap = new HashMap<>();
-        for(Map.Entry<Long, Set<Long>> entry : filmLikeIds.entrySet()) {
+        for (Map.Entry<Long, Set<Long>> entry : filmLikeIds.entrySet()) {
             Long filmId = entry.getKey();
             Set<Long> value = entry.getValue();
             Film film = filmMap.get(filmId);
