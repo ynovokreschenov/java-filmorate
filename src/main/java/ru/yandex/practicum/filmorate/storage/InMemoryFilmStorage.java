@@ -17,17 +17,28 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getAll() {
-        return (List<Film>) filmMap.values();
+        return filmMap.values().stream().toList();
     }
 
     @Override
     public Optional<Film> get(Long filmId) {
-        return Optional.of(filmMap.get(filmId));
+        //return Optional.of(filmMap.get(filmId));
+        if (filmMap.containsKey(filmId)) {
+            return Optional.of(filmMap.get(filmId));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Film save(Film film) {
         film.setId(++generator);
+        filmMap.put(film.getId(), film);
+        return film;
+    }
+
+    @Override
+    public Film update(Film film) {
         filmMap.put(film.getId(), film);
         return film;
     }
@@ -45,6 +56,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     public List<Film> listTop10Films(Integer count) {
+        //return null;
         HashMap<Film, Integer> filmLikesMap = new HashMap<>();
         for (Map.Entry<Long, Set<Long>> entry : filmLikeIds.entrySet()) {
             Long filmId = entry.getKey();
@@ -58,11 +70,12 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .stream()
                 .sorted(Map.Entry.comparingByValue());
 
-        List<Film> filmsSorted = (List<Film>) filmLikesMap.keySet();
+        //System.out.println("!!!!!!!!!!!! " + filmLikesMap);
+        Set<Film> filmsSorted = filmLikesMap.keySet();
         if (filmsSorted.size() > count) {
-            return filmsSorted.subList(0, count - 1);
+            return filmsSorted.stream().toList().subList(0, count - 1);
         } else {
-            return filmsSorted;
+            return filmsSorted.stream().toList();
         }
     }
 }

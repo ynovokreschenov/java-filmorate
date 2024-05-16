@@ -1,17 +1,23 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @AllArgsConstructor
 public class UserService {
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserStorage userStorage;
 
     public List<User> getAll() {
@@ -31,13 +37,13 @@ public class UserService {
     public void update(User user) {
         Long userId = user.getId();
         final User saved = userStorage.get(userId)
-                .orElseThrow(() -> new NotFoundException("User not found with" + userId));
+                .orElseThrow(() -> new NotFoundException("User not found with " + userId));
         userStorage.update(user);
     }
 
     public void addFriend(Long userId, Long friendId) {
         final User user = userStorage.get(userId)
-                .orElseThrow(() -> new NotFoundException("User not found with" + userId));
+                .orElseThrow(() -> new NotFoundException("User not found with " + userId));
         final User friend = userStorage.get(friendId)
                 .orElseThrow(() -> new NotFoundException("User not found with" + friendId));
         // TODO check userId friendID
@@ -56,7 +62,7 @@ public class UserService {
     public List<User> getUserFriends(Long userId) {
         final User user = userStorage.get(userId)
                 .orElseThrow(() -> new NotFoundException("User not found with" + userId));
-        return userStorage.getUserFriends(userId);
+        return userStorage.getUserFriends(user);
     }
 
     public List<User> getUsersCommonFriends(Long userId, Long otherId) {
@@ -64,6 +70,6 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found with" + userId));
         final User other = userStorage.get(otherId)
                 .orElseThrow(() -> new NotFoundException("User not found with" + otherId));
-        return userStorage.getUsersCommonFriends(userId, otherId);
+        return userStorage.getUsersCommonFriends(user, other);
     }
 }

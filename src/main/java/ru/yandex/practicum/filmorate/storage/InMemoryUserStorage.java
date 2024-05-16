@@ -16,7 +16,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public List<User> getAll() {
-        return (List<User>) userMap.values();
+        return userMap.values().stream().toList();
     }
 
     @Override
@@ -33,7 +33,11 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public Optional<User> get(Long userId) {
-        return Optional.of(userMap.get(userId));
+        if (userMap.containsKey(userId)) {
+            return Optional.of(userMap.get(userId));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -66,18 +70,19 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public List<User> getUserFriends(Long userId) {
+    public List<User> getUserFriends(User user) {
         List<User> userFriends = new ArrayList<>();
-        for (Long friendId : userFriendIds.get(userId)) {
+        Set<Long> uFriendIds = userFriendIds.computeIfAbsent(user.getId(), id -> new HashSet<>());
+        for (Long friendId : uFriendIds) {
             userFriends.add(userMap.get(friendId));
         }
         return userFriends;
     }
 
     @Override
-    public List<User> getUsersCommonFriends(Long userId, Long otherId) {
-        Set<Long> uFriendIds = userFriendIds.get(userId);
-        Set<Long> oFriendIds = userFriendIds.get(otherId);
+    public List<User> getUsersCommonFriends(User user, User other) {
+        Set<Long> uFriendIds = userFriendIds.computeIfAbsent(user.getId(), id -> new HashSet<>());
+        Set<Long> oFriendIds = userFriendIds.computeIfAbsent(other.getId(), id -> new HashSet<>());
         Set<Long> commonFriendIds = uFriendIds.stream()
                 .filter(oFriendIds::contains)
                 .collect(Collectors.toSet());

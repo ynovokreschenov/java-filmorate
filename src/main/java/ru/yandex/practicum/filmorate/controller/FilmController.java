@@ -39,9 +39,9 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film save(@Valid @RequestBody Film film) {
+    public Film update(@Valid @RequestBody Film film) {
         validateService.validateFilm(film);
-        return filmService.save(film);
+        return filmService.update(film);
     }
 
     @PutMapping("/{filmId}/like/{userId}")
@@ -54,8 +54,11 @@ public class FilmController {
         filmService.deleteLike(filmId, userId);
     }
 
-    @GetMapping("/popular?count={count}")
-    public void listTop10Films(@PathVariable Integer count) {
-        filmService.listTop10Films(count);
+    //@GetMapping("/popular?count={count}")
+    @GetMapping("/popular")
+    public List<Film> listTop10Films(@RequestParam("count") Integer count) {
+        return filmService.listTop10Films(count);
+        //System.out.println(count);
+        //return new ArrayList<>();
     }
 }

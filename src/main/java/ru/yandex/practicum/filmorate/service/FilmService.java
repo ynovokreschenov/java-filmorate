@@ -30,6 +30,13 @@ public class FilmService {
         return filmStorage.save(film);
     }
 
+    public Film update(Film film) {
+        Long filmId = film.getId();
+        final Film saved = filmStorage.get(filmId)
+                .orElseThrow(() -> new NotFoundException("Film not found with " + filmId));
+        return filmStorage.update(film);
+    }
+
     public void addLike(Long filmId, Long userId) {
         final Film film = filmStorage.get(filmId)
                 .orElseThrow(() -> new NotFoundException("Film not found with " + filmId));
