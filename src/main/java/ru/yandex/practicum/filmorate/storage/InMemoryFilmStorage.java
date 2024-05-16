@@ -8,12 +8,11 @@ import java.util.*;
 import java.util.Map;
 
 
-@Component // @Repository
+@Component
 public class InMemoryFilmStorage implements FilmStorage {
     long generator = 0;
     private final Map<Long, Film> filmMap = new HashMap<>();
     private final HashMap<Long, Set<Long>> filmLikeIds = new HashMap<>();
-    //private static final Logger log = LoggerFactory.getLogger(InMemoryFilmStorage.class);
 
     @Override
     public List<Film> getAll() {
@@ -45,16 +44,12 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(Film film, User user) {
-        //Set<Long> fLikeIds = filmLikeIds.computeIfAbsent(user.getId(), id -> new HashSet<>());
-        //Set<Long> fLikeIds = filmLikeIds.get(film.getId());
         Set<Long> fLikeIds = filmLikeIds.computeIfAbsent(film.getId(), id -> new HashSet<>());
         fLikeIds.add(user.getId());
     }
 
     @Override
     public void deleteLike(Film film, User user) {
-        //Set<Long> fLikeIds = filmLikeIds.computeIfAbsent(user.getId(), id -> new HashSet<>());
-        //Set<Long> fLikeIds = filmLikeIds.get(film.getId());
         Set<Long> fLikeIds = filmLikeIds.computeIfAbsent(film.getId(), id -> new HashSet<>());
         fLikeIds.remove(user.getId());
     }
@@ -68,14 +63,10 @@ public class InMemoryFilmStorage implements FilmStorage {
             Integer likes = value.size();
             filmLikesMap.put(film, likes);
         }
-        System.out.println("filmLikeIds " + filmLikeIds.toString());
-        System.out.println("filmLikesMap " + filmLikesMap.toString());
 
         filmLikesMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue());
-
-        System.out.println("filmLikesMap sorted " + filmLikesMap.toString());
 
         Set<Film> filmsSorted = filmLikesMap.keySet();
         if (filmsSorted.size() > count) {

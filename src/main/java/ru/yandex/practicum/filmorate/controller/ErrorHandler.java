@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
-//@RestControllerAdvice
 @RestControllerAdvice(basePackages = "ru.yandex.practicum.filmorate")
 @Slf4j
 public class ErrorHandler {
@@ -28,12 +27,10 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler//(ConditionsNotMetException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final ConditionsNotMetException e) {
         log.warn("Error", e);
-        // TODO: вывести stacktrace
-        //return new ErrorResponse(e.getStackTrace().toString());
         return new ErrorResponse(e.getMessage());
     }
 }

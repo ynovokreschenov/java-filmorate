@@ -12,7 +12,6 @@ public class InMemoryUserStorage implements UserStorage {
     long generator = 0;
     private final HashMap<Long, User> userMap = new HashMap<>();
     private final HashMap<Long, Set<Long>> userFriendIds = new HashMap<>();
-    //private static final Logger log = LoggerFactory.getLogger(InMemoryUserStorage.class);
 
     @Override
     public List<User> getAll() {

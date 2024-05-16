@@ -30,7 +30,6 @@ public class ValidateService {
         // имя для отображения может быть пустым — в таком случае будет использован логин;
         if (user.getName() == null || user.getName().isBlank()) {
             log.warn("Имя пользователя не указано, использован логин: {}", user.getName());
-            //throw new ValidationException("Ошибка валидации");
             user.setName(user.getLogin());
         }
     }
