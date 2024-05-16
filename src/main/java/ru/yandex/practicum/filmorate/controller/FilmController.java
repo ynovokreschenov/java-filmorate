@@ -54,11 +54,8 @@ public class FilmController {
         filmService.deleteLike(filmId, userId);
     }
 
-    //@GetMapping("/popular?count={count}")
     @GetMapping("/popular")
     public List<Film> listTop10Films(@RequestParam("count") Integer count) {
         return filmService.listTop10Films(count);
-        //System.out.println(count);
-        //return new ArrayList<>();
     }
 }
