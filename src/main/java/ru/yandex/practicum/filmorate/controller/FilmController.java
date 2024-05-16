@@ -1,84 +1,61 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import java.time.LocalDate;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.ValidateService;
+
 import java.util.*;
 
 
 @RestController
+@Slf4j
+@AllArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
-    private final Map<Long, Film> films = new HashMap<>();
-    private static final Logger log = LoggerFactory.getLogger(FilmController.class);
+    private final FilmService filmService;
+    private final ValidateService validateService;
 
     @GetMapping
-    public Collection<Film> getAll() {
-        return films.values();
+    public List<Film> getAll() {
+        return filmService.getAll();
+    }
+
+    @GetMapping("/{filmId}")
+    public Film get(@PathVariable Long filmId) {
+        log.info("GET /films/{} ==>", filmId);
+        Film film = filmService.get(filmId);
+        log.info("GET /films/{} <==", filmId);
+        return film;
     }
 
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
-        if (validate(film)) {
-            film.setId(getNextId());
-            films.put(film.getId(), film);
-            return film;
-        } else {
-            throw new ValidationException("Ошибка валидации");
-        }
+        validateService.validateFilm(film);
+        return filmService.save(film);
     }
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
-        Long id = film.getId();
-        if (!films.containsKey(id)) {
-            throw new ConditionsNotMetException("Указан некорректный идентификатор");
-        }
-        if (validate(film)) {
-            film.setId(id);
-            films.replace(id, film);
-            return film;
-        } else {
-            throw new ValidationException("Ошибка валидации");
-        }
+        validateService.validateFilm(film);
+        return filmService.update(film);
     }
 
-    private long getNextId() {
-        long currentMaxId = films.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+    @PutMapping("/{filmId}/like/{userId}")
+    public void addLike(@PathVariable Long filmId, @PathVariable Long userId) {
+        filmService.addLike(filmId, userId);
     }
 
-    private boolean validate(Film film) {
-        //название не может быть пустым;
-        if (film.getName() == null || film.getName().isBlank()) {
-            log.error("Название не может быть пустым");
-            return false;
-        }
-        //максимальная длина описания — 200 символов;
-        if (film.getDescription().length() > 200) {
-            log.error("Максимальная длина описания — 200 символов: {}", film.getDescription().length());
-            return false;
-        }
-        //дата релиза — не раньше 28 декабря 1895 года;
-        LocalDate dateMin = LocalDate.of(1895, 12, 28);
-        if (film.getReleaseDate().isBefore(dateMin)) {
-            log.error("дата релиза {} — должна быть не раньше {}", film.getReleaseDate(), dateMin);
-            return false;
-        }
-        //продолжительность фильма должна быть положительным числом.
-        if (film.getDuration() < 0) {
-            log.error("продолжительность фильма должна быть положительным числом: {}", film.getDuration());
-            return false;
-        }
-        return true;
+    @DeleteMapping("/{filmId}/like/{userId}")
+    public void deleteLike(@PathVariable Long filmId, @PathVariable Long userId) {
+        filmService.deleteLike(filmId, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> listTop10Films(@RequestParam("count") Integer count) {
+        return filmService.listTop10Films(count);
     }
 }
